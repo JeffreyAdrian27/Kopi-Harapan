@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kopi Harapan - Awali Hari dengan Secangkir Harapan</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link rel="stylesheet" href="./custom.css">
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+            colors: {
+                coffee: {
+                DEFAULT: '#8b5a2b',
+                dark: '#3c2415',
+                light: '#f4ebd0',
+                },
+                cream: '#faf6ee',
+            }
+            }
+        }
+    }
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const loadingScreen = document.getElementById("loading-screen");
+        
+        // 1. Efek saat halaman selesai dimuat (masuk halaman baru)
+        if (loadingScreen) {
+            // Pastikan posisinya muncul dulu
+            loadingScreen.style.opacity = "1";
+            loadingScreen.style.display = "flex";
+
+            // Beri sedikit jeda lalu pudar (fade out)
+            setTimeout(function () {
+                loadingScreen.style.opacity = "0";
+                setTimeout(function () {
+                    loadingScreen.style.display = "none";
+                }, 700); // Sesuaikan dengan durasi transisi CSS (0.7s)
+            }, 300);
+        }
+
+        // 2. Efek saat pengguna KLIK LINK untuk pindah halaman
+        const internalLinks = document.querySelectorAll('a[href]');
+        
+        internalLinks.forEach(link => {
+            link.addEventListener('click', function (e) {
+                const targetHref = this.getAttribute('href');
+                
+                // Abaikan link anchor (#), link kosong, atau target="_blank"
+                if (
+                    targetHref && 
+                    !targetHref.startsWith('#') && 
+                    !targetHref.startsWith('javascript') && 
+                    this.getAttribute('target') !== '_blank'
+                ) {
+                    e.preventDefault(); // Tahan perpindahan halaman sejenak
+                    
+                    if (loadingScreen) {
+                        loadingScreen.style.display = "flex";
+                        // Sedikit timeout agar transisi opacity terbaca oleh browser
+                        setTimeout(() => {
+                            loadingScreen.style.opacity = "1";
+                        }, 10);
+                    }
+
+                    // Pindah halaman setelah animasi loading muncul (misal 400ms)
+                    setTimeout(() => {
+                        window.location.href = targetHref;
+                    }, 400);
+                }
+            });
+        });
+    });
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const menuBtn = document.getElementById('menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        if (menuBtn && mobileMenu) {
+            menuBtn.addEventListener('click', () => {
+                // Toggle menu dropdown
+                mobileMenu.classList.toggle('hidden');
+                
+                // Toggle animasi tombol X
+                menuBtn.classList.toggle('open');
+            });
+        }
+    });
+</script>
+<body class="bg-cream text-coffee-dark font-sans antialiased">
+    <!-- Loading Screen -->
+    <div id="loading-screen" class="fixed inset-0 z-50 flex items-center justify-center bg-[#f2ebd9] transition-opacity duration-700">
+        <div class="flex flex-col items-center gap-3">
+            <!-- Spinner Animasi Putar -->
+            <div class="w-12 h-12 border-4 border-amber-900/20 border-t-[#8b5a2b] rounded-full animate-spin"></div>
+            <!-- <span class="text-amber-900 font-medium text-sm tracking-wider">Memuat Kopi Harapan...</span> -->
+        </div>
+    </div>
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md shadow-sm">
+        <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
+            <!-- Logo -->
+            <div class="text-2xl font-bold tracking-tight text-coffee-dark">
+                Kopi<span class="text-coffee">Harapan</span>
+            </div>
+
+            <!-- Menu untuk Desktop (Layar Lebar) -->
+            <div class="hidden md:flex space-x-8 font-medium">
+                <a href="index.html" class="text-coffee font-semibold">Beranda</a>
+                <a href="#tentang" class="hover:text-coffee transition">Filosofi</a>
+                <a href="#bestseller" class="hover:text-coffee transition">Menu Favorit</a>
+                <a href="#contact" class="hover:text-coffee transition">Lokasi</a>
+            </div>
+
+            <!-- Tombol Aksi Kanan & Hamburger Mobile -->
+            <div class="flex items-center space-x-4">
+                <a href="menu.html" class="bg-coffee text-white px-5 py-2.5 rounded-full font-medium shadow hover:bg-coffee-dark transition text-sm md:text-base">Lihat Menu</a>
+                
+                <!-- Tombol Hamburger -->
+                <button id="menu-btn" class="md:hidden text-coffee-dark focus:outline-none w-6 h-5 relative z-50" aria-label="Menu">
+                    <span class="hamburger-line absolute top-0 left-0 w-full h-[3px] bg-coffee-dark rounded-full transition-all duration-300"></span>
+                    <span class="hamburger-line absolute top-1/2 left-0 w-full h-[3px] bg-coffee-dark rounded-full transition-all duration-300 -translate-y-1/2"></span>
+                    <span class="hamburger-line absolute bottom-0 left-0 w-full h-[3px] bg-coffee-dark rounded-full transition-all duration-300"></span>
+                </button>
+            </div>
+        </div>
+
+        <!-- Menu Dropdown untuk Mobile (Tersembunyi secara default) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 px-6 py-4 space-y-3 font-medium shadow-lg">
+            <a href="index.html" class="block text-coffee font-semibold py-1">Beranda</a>
+            <a href="#tentang" class="block text-gray-700 hover:text-coffee transition py-1">Filosofi</a>
+            <a href="#bestseller" class="block text-gray-700 hover:text-coffee transition py-1">Menu Favorit</a>
+            <a href="#contact" class="block text-gray-700 hover:text-coffee transition py-1">Lokasi</a>
+        </div>
+    </nav>
+
+    <!-- Hero Section dengan Background Gambar -->
+    <header class="relative bg-coffee-dark text-white py-28 md:py-36 px-6 text-center bg-cover bg-center" style="background-image: linear-gradient(rgba(60, 36, 21, 0.85), rgba(60, 36, 21, 0.85)), url('https://images.unsplash.com/photo-1542181961-9590d0c79dab?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');">
+        <div class="max-w-3xl mx-auto space-y-6">
+        <span class="bg-coffee/50 text-coffee-light text-xs font-semibold uppercase tracking-widest py-1.5 px-4 rounded-full">100% Kopi Lokal Pilihan</span>
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight">Awali Hari Bersama Kopi Harapan</h1>
+        <p class="text-lg text-gray-200">Setiap seduhan membawa cerita, kehangatan, dan energi positif untuk menemani langkah harimu.</p>
+        </div>
+    </header>
+
+    <!-- Section Tentang / Filosofi Kami -->
+    <section id="tentang" class="py-16 px-6 max-w-5xl mx-auto">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+        <div class="space-y-4">
+            <span class="text-coffee font-semibold text-sm uppercase tracking-wider">Filosofi Kami</span>
+            <h2 class="text-3xl font-bold text-coffee-dark">Lebih dari Sekadar Secangkir Kopi</h2>
+            <p class="text-gray-600 leading-relaxed">
+            Kopi Harapan lahir dari keyakinan sederhana: bahwa secangkir kopi yang baik dapat menjadi pemantik semangat untuk menghadapi hari esok yang lebih baik. Kami memilih biji kopi kualitas terbaik langsung dari petani lokal nusantara dan meraciknya dengan penuh ketulusan.
+            </p>
+            <div class="pt-2">
+            <a href="menu.html" class="text-coffee font-bold hover:underline inline-flex items-center gap-2">Jelajahi pilihan menu kami
+                <svg class="w-4 h-4 text-coffee" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5l7 7-7 7"></path>
+                </svg>
+            </a>
+            </div>
+        </div>
+        <!-- Kotak gambar kedai/suasana kopi -->
+        <div class="h-80 rounded-3xl overflow-hidden shadow-md bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1442512595331-e89e73853f31?auto=format&fit=crop&w=800&q=80')"></div>
+        </div>
+    </section>
+
+    <!-- Section Ringkasan Menu Unggulan dengan Gambar (Best Seller) -->
+    <section id="bestseller" class="py-14 bg-white px-6">
+        <div class="max-w-6xl mx-auto text-center space-y-12">
+        <div>
+            <h2 class="text-3xl font-bold tracking-tight mb-3">Menu Favorit</h2>
+            <p class="text-gray-600 max-w-xl mx-auto">Beberapa racikan yang paling dicari oleh para penikmat setia Kopi Harapan.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-left">
+            <!-- Card 1 -->
+            <div class="bg-cream/50 rounded-2xl overflow-hidden border border-gray-100 flex flex-col justify-between shadow-sm hover:shadow-md transition menu-item">
+                <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80')"></div>
+                <div class="p-6 flex flex-col flex-grow justify-between">
+                    <div>
+                    <h3 class="font-bold text-xl mb-1">Kopi Susu Harapan</h3>
+                    <p class="text-gray-600 text-sm mb-4">Espresso, fresh milk creamy, dan gula aren pilihan alami.</p>
+                    </div>
+                    <div>
+                    <div class="flex justify-between items-center pt-4 border-t border-gray-200/60">
+                        <span class="font-bold text-coffee">Rp 22.000</span>
+                    </div>
+                    <div class="pt-4">
+                        <span class="block text-xs bg-[#f4ebd0] text-coffee-dark font-medium py-2.5 text-center rounded-xl">Best Seller</span>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2 -->
+            <div class="bg-cream/50 rounded-2xl overflow-hidden border border-gray-100 flex flex-col justify-between shadow-sm hover:shadow-md transition menu-item">
+            <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+                <div>
+                <h3 class="font-bold text-xl mb-1">Americano Klasik</h3>
+                <p class="text-gray-600 text-sm mb-4">Espresso murni dengan tambahan air, bersih dan menyegarkan.</p>
+                </div>
+                <div>
+                <div class="flex justify-between items-center pt-4 border-t border-gray-200/60">
+                    <span class="font-bold text-coffee">Rp 18.000</span>
+                </div>
+                <div class="pt-4">
+                    <span class="block text-xs bg-[#f4ebd0] text-coffee-dark font-medium py-2.5 text-center rounded-xl">Favorit Segar</span>
+                </div>
+                </div>
+            </div>
+            </div>
+
+            <!-- Card 3 -->
+            <div class="bg-cream/50 rounded-2xl overflow-hidden border border-gray-100 flex flex-col justify-between shadow-sm hover:shadow-md transition menu-item">
+            <div class="h-48 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80')"></div>
+            <div class="p-6 flex flex-col flex-grow justify-between">
+                <div>
+                <h3 class="font-bold text-xl mb-1">Matcha Latte</h3>
+                <p class="text-gray-600 text-sm mb-4">Teh hijau premium asli Jepang dicampur susu segar yang creamy.</p>
+                </div>
+                <div>
+                <div class="flex justify-between items-center pt-4 border-t border-gray-200/60">
+                    <span class="font-bold text-coffee">Rp 25.000</span>
+                </div>
+                <div class="pt-4">
+                    <span class="block text-xs bg-coffee-light text-coffee-dark font-medium py-2.5 text-center rounded-xl">Signature</span>
+                </div>
+                </div>
+            </div>
+            </div>
+        </div>
+
+        <div>
+            <a href="menu.html" class="inline-flex items-center gap-2 border border-coffee text-coffee font-medium px-8 py-3 rounded-full hover:bg-coffee hover:text-white transition group">
+                Lihat Semua Menu 
+                <svg class="w-4 h-4 text-coffee group-hover:text-white transition" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M9 5l7 7-7 7"></path>
+                </svg>    
+            </a>
+        </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="w-full bg-[#f2ebd9] py-14 px-6 border-y border-amber-900/10">
+            
+            <!-- Container pembatas agar card tidak terlalu melebar penuh -->
+            <div class="max-w-[1400px] mx-auto">
+                
+                <div class="section-title">
+                    <h2 class="text-2xl font-bold text-coffee-dark">Kunjungi Kafe Kami</h2>
+                    <p class="text-gray-600 text-sm leading-relaxed">Nikmati langsung aroma seduhan segar dan suasana hangat secara langsung di tempat bersama orang terdekat.</p>
+                </div>
+
+                <div class="contact-info">
+                    <!-- Card 1: Location -->
+                    <div class="contact-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <h3>Location</h3>
+                        <p class="mb-3">Jl. Harapan No. 45<br>Kota Surabaya, Jawa Timur</p>
+                        
+                        <!-- Tombol Buka di Google Maps -->
+                        <div class="pt-2">
+                            <a href="https://maps.google.com/?q=Jl.+Harapan+No.+45,+Kota+Surabaya" target="_blank" class="inline-block bg-[#8b5a2b] text-white text-sm font-medium px-5 py-2.5 rounded-xl shadow hover:bg-[#3c2415] transition">
+                            Buka di Google Maps
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Card 2: Hours -->
+                    <div class="contact-card">
+                        <i class="fas fa-clock"></i>
+                        <h3>Hours</h3>
+                        <p>Senin - Jumat: 6:30am - 8pm<br>
+                        Sabtu - Minggu: 7am - 9pm</p>
+                    </div>
+
+                    <!-- Card 3: Contact -->
+                    <div class="contact-card">
+                        <i class="fas fa-phone-alt"></i>
+                        <h3>Contact</h3>
+                        <p>Telepon/WhatsApp: 0812-3456-7890<br>
+                        Email: hello@kopiharapan.com</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="kontak" class="bg-white text-coffee-dark pt-12 pb-8 px-6 border-t border-gray-200">
+        <div class="max-w-7xl mx-auto">
+        <!-- Bagian Atas Footer (Grid Info) -->
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-8 items-start pb-10 border-b border-gray-200">
+            <!-- Logo & Brand (Mengambil 5 kolom di kiri) -->
+            <div class="md:col-span-5 space-y-3">
+            <div class="text-3xl font-bold tracking-tight text-coffee-dark">
+                Kopi<span class="text-coffee">Harapan</span>
+            </div>
+            <p class="text-xs text-gray-500 leading-relaxed">Awali hari dengan secangkir harapan dan cerita hangat.</p>
+            </div>
+
+            <!-- Consumer Complaints / Informasi Layanan Konsumen (Mulai dari kolom ke-8 hingga ke-12 di kanan) -->
+            <div class="md:col-span-5 md:col-start-8 space-y-3 text-sm">
+            <h4 class="font-bold text-coffee-dark">Consumer Complaints Service Contact Information</h4>
+            <div class="space-y-1 text-gray-600 text-xs leading-relaxed">
+                <p>Direktorat Jenderal Perlindungan Konsumen dan Tertib Niaga, Kementerian Perdagangan Republik Indonesia</p>
+                <p class="italic pt-1">WhatsApp Direktorat PKTN: 0853-1111-1010</p>
+            </div>
+            </div>
+        </div>
+
+        <!-- Bagian Bawah Footer (Copyright & Ikon Media Sosial) -->
+        <div class="flex flex-col md:flex-row justify-between items-center pt-6 gap-4">
+            <div class="text-xs text-gray-500 flex flex-wrap items-center gap-2">
+            <span>&copy; 2026 Kopi Harapan. All rights reserved.</span>
+            <span>&bull;</span>
+            <a href="#" class="hover:underline">Terms and Conditions</a>
+            <span>&bull;</span>
+            <a href="#" class="hover:underline">Privacy Policy</a>
+            </div>
+
+            <!-- Tombol Ikon Media Sosial (SVG) -->
+            <div class="flex items-center space-x-3">
+            <!-- YouTube -->
+            <a href="#" aria-label="YouTube" class="w-9 h-9 bg-gray-100 hover:bg-coffee hover:text-white text-gray-600 rounded-full flex items-center justify-center transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </a>
+            <!-- Twitter / X -->
+            <a href="#" aria-label="Twitter" class="w-9 h-9 bg-gray-100 hover:bg-coffee hover:text-white text-gray-600 rounded-full flex items-center justify-center transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>
+            </a>
+            <!-- Instagram -->
+            <a href="#" aria-label="Instagram" class="w-9 h-9 bg-gray-100 hover:bg-coffee hover:text-white text-gray-600 rounded-full flex items-center justify-center transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+            </a>
+            <!-- LinkedIn -->
+            <a href="#" aria-label="LinkedIn" class="w-9 h-9 bg-gray-100 hover:bg-coffee hover:text-white text-gray-600 rounded-full flex items-center justify-center transition">
+                <svg class="w-4 h-4 fill-current" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+            </a>
+            </div>
+        </div>
+        </div>
+    </footer>
+</body>
+</head>
+</html>

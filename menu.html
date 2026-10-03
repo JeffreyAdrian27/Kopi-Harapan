@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daftar Menu - Kopi Harapan</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="./custom.css">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            coffee: { DEFAULT: '#8b5a2b', dark: '#3c2415', light: '#f4ebd0' },
+            cream: '#faf6ee',
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-cream text-coffee-dark font-sans antialiased">
+
+  <!-- Header Halaman Menu -->
+  <div class="max-w-4xl mx-auto px-6 pt-12 pb-6">
+    <a href="index.html" class="text-coffee hover:underline mb-4 inline-flex items-center gap-2 font-medium">
+        <svg class="w-4 h-4 text-coffee" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M15 19l-7-7 7-7"></path>
+        </svg>Kembali ke Beranda</a>
+    <h1 class="text-4xl font-extrabold mb-2 tracking-tight">Menu Kopi Harapan</h1>
+    <p class="text-gray-600">Daftar lengkap racikan kopi, minuman non-kopi, dan cemilan yang tersedia di kedai kami.</p>
+  </div>
+
+  <!-- Filter Tombol Kategori -->
+  <div class="max-w-4xl mx-auto px-6 mb-8">
+    <div class="flex flex-wrap gap-2" id="filter-container">
+      <button onclick="filterMenu('all')" class="filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-coffee text-white shadow-sm" data-category="all">Semua Menu</button>
+      <button onclick="filterMenu('kopi')" class="filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-white text-coffee-dark border border-gray-200 hover:bg-coffee-light" data-category="kopi">Kopi</button>
+      <button onclick="filterMenu('non-kopi')" class="filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-white text-coffee-dark border border-gray-200 hover:bg-coffee-light" data-category="non-kopi">Non-Kopi</button>
+      <button onclick="filterMenu('cemilan')" class="filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-white text-coffee-dark border border-gray-200 hover:bg-coffee-light" data-category="cemilan">Cemilan</button>
+    </div>
+  </div>
+
+  <!-- Main Menu Grid -->
+  <main class="max-w-4xl mx-auto px-6 pb-20">
+    <div id="menu-grid" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <!-- Item menu dirender dinamis via JavaScript -->
+    </div>
+  </main>
+
+  <!-- JavaScript untuk Filter & Data Menu -->
+  <script>
+    const menuData = [
+      { id: 1, name: "Kopi Susu Harapan", desc: "Espresso, fresh milk creamy, dan gula aren pilihan alami.", price: "Rp 22.000", category: "kopi", image: "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=600&q=80" },
+      { id: 2, name: "Americano Klasik", desc: "Espresso murni dengan tambahan air, bersih dan menyegarkan.", price: "Rp 18.000", category: "kopi", image: "https://images.unsplash.com/photo-1517701550927-30cf4ba1dba5?auto=format&fit=crop&w=600&q=80" },
+      { id: 3, name: "Caramel Macchiato", desc: "Kopi susu lembut berpadu dengan lapisan saus karamel legit.", price: "Rp 28.000", category: "kopi", image: "https://images.unsplash.com/photo-1572442388796-11668a67e53d?auto=format&fit=crop&w=600&q=80" },
+      { id: 4, name: "Matcha Latte", desc: "Teh hijau premium asli Jepang dicampur susu segar yang creamy.", price: "Rp 25.000", category: "non-kopi", image: "https://images.unsplash.com/photo-1536256263959-770b48d82b0a?auto=format&fit=crop&w=600&q=80" },
+      { id: 5, name: "Chocolate Signature", desc: "Cokelat pekat pilihan dengan kehangatan susu segar.", price: "Rp 24.000", category: "non-kopi", image: "https://images.unsplash.com/photo-1542990253-0d0f5be5f0ed?auto=format&fit=crop&w=600&q=80" },
+      { id: 6, name: "Croissant Mentega", desc: "Pastry renyah di luar, lembut dan wangi mentega di dalam.", price: "Rp 18.000", category: "cemilan", image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?auto=format&fit=crop&w=600&q=80" }
+    ];
+
+    function renderMenu(items) {
+      const menuGrid = document.getElementById('menu-grid');
+      menuGrid.innerHTML = '';
+
+      if (items.length === 0) {
+        menuGrid.innerHTML = '<p class="text-gray-500 text-center col-span-2 py-8">Menu tidak ditemukan dalam kategori ini.</p>';
+        return;
+      }
+
+      items.forEach(item => {
+        const itemElement = document.createElement('div');
+        itemElement.className = "bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-100 flex flex-col menu-item";
+        itemElement.innerHTML = `
+          <div class="h-48 bg-cover bg-center" style="background-image: url('${item.image}')"></div>
+          <div class="p-5 flex flex-col flex-grow justify-between">
+            <div>
+              <div class="flex justify-between items-baseline mb-1">
+                <h3 class="font-bold text-lg text-coffee-dark">${item.name}</h3>
+                <span class="font-bold text-coffee text-base">${item.price}</span>
+              </div>
+              <p class="text-sm text-gray-500">${item.desc}</p>
+            </div>
+          </div>
+        `;
+        menuGrid.appendChild(itemElement);
+      });
+    }
+
+    function filterMenu(category) {
+      const buttons = document.querySelectorAll('.filter-btn');
+      buttons.forEach(btn => {
+        if (btn.getAttribute('data-category') === category) {
+          btn.className = "filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-coffee text-white shadow-sm";
+        } else {
+          btn.className = "filter-btn px-5 py-2 rounded-full font-medium text-sm transition bg-white text-coffee-dark border border-gray-200 hover:bg-coffee-light";
+        }
+      });
+
+      if (category === 'all') {
+        renderMenu(menuData);
+      } else {
+        const filtered = menuData.filter(item => item.category === category);
+        renderMenu(filtered);
+      }
+    }
+
+    renderMenu(menuData);
+  </script>
+
+</body>
+</html>
